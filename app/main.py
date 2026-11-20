@@ -2,13 +2,13 @@
 
 from flask import Flask, request, jsonify
       
-from app.database import init_db
+from app.database import load_seed
 from app.agent import new_chat, ask_agent
 
 app = Flask(__name__)
 
 # Create the database tables when the server starts (safe to run repeatedly)
-init_db()
+load_seed()
 
 # Keeps one chat session per session_id while the server is running
 sessions = {}
