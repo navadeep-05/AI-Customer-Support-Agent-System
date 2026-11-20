@@ -3,4 +3,3 @@ python-dotenv
 pytest
 flask
 gunicorn
-gunicorn
