@@ -174,7 +174,8 @@ export default function App() {
     setLoading(true)
 
     try {
-      const res = await fetch('/chat', {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+      const res = await fetch(`${apiBase}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -185,10 +186,12 @@ export default function App() {
       })
 
       let data
-      try {
+      const contentType = res.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
         data = await res.json()
-      } catch {
-        data = { error: `Server error (${res.status})` }
+      } else {
+        const textResp = await res.text()
+        data = { error: `Server error: endpoint returned HTML instead of JSON. Ensure your backend is running and VITE_API_BASE_URL points to the Flask server.` }
       }
 
       let updatedMessages

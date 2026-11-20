@@ -1,11 +1,14 @@
 """Flask web server exposing the support agent through a /chat endpoint."""
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from app.database import init_db
 from app.agent import new_chat, ask_agent
 
 app = Flask(__name__)
+# Enable CORS for all origins so frontend on Render / Vercel / Netlify can connect
+CORS(app)
 
 # Create the database tables when the server starts (safe to run repeatedly)
 init_db()
@@ -16,9 +19,14 @@ sessions = {}
 
 @app.route("/", methods=["GET"])
 def home():
-    """Explain where the chat UI lives, since this is the API server."""
+    """Health & info endpoint for root deployment check."""
     return jsonify({
-        "message": "Backend is running. Open the chat UI at http://localhost:5173"
+        "status": "healthy",
+        "service": "Customer Support Agent Backend API",
+        "endpoints": {
+            "health": "/health",
+            "chat": "POST /chat"
+        }
     })
 
 
