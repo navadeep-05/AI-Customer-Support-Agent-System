@@ -3,15 +3,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from app.database import init_db
+from app.database import load_seed
 from app.agent import new_chat, ask_agent
 
 app = Flask(__name__)
 # Enable CORS for all origins so frontend on Render / Vercel / Netlify can connect
 CORS(app)
 
-# Create the database tables when the server starts (safe to run repeatedly)
-init_db()
+# Seed data (also calls init_db internally) when the server starts
+load_seed()
 
 # Keeps one chat session per session_id while the server is running
 sessions = {}
@@ -70,4 +70,8 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )
