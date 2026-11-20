@@ -2,6 +2,7 @@
 
 from flask import Flask, request, jsonify
 
+from app.main import app        
 from app.database import init_db
 from app.agent import new_chat, ask_agent
 
